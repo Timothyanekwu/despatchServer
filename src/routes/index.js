@@ -12,9 +12,7 @@ router.get("/", (req, res) => {
   });
 });
 
-// Mount feature routers here:
-// router.use("/auth",   require("./auth.routes"));
-// router.use("/users",  require("./user.routes"));
-// router.use("/orders", require("./order.routes"));
+// Mount feature routers below:
+// router.use("/auth", require("./authRoutes"));
 
 module.exports = router;
