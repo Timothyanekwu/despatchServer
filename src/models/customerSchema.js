@@ -1,8 +1,6 @@
-import { pgTable, uuid, serial, text, timestamp, integer, boolean, varchar } from "drizzle-orm/pg-core";
-import {vehicle} from "./vehicleSchema.js"
-import { relations } from "drizzle-orm";
+import { pgTable, uuid, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
-export const rider = pgTable("rider", {
+export const customer = pgTable("customer", {
     id: uuid("id").defaultRandom().primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),
     email: text("email").notNull().unique(),
@@ -11,7 +9,3 @@ export const rider = pgTable("rider", {
     password: varchar("password", { length: 255 }).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
-
-export const riderRelations = relations(rider, ({ many }) => ({
-  vehicles: many(vehicle),
-}));

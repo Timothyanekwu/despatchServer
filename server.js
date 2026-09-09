@@ -7,8 +7,10 @@ import { connectDB } from "./src/config/db.js";
 import routes from "./src/routes/index.js";
 import notFound from "./src/middlewares/notFound.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
-import authRoutes from "./src/routes/authRoutes.js";
+import riderAuthRoutes from "./src/routes/riderAuthRoutes.js";
+import customerAuthRoutes from "./src/routes/customerAuthRoutes.js";
 import vehicleRegistrationRoutes from "./src/routes/vehicleRegistRoutes.js";
+
 
 // ──────────────────────────────────────────
 // Initialise Express app
@@ -34,7 +36,8 @@ app.use((req, res, next) => {
 // Routes
 // ──────────────────────────────────────────
 app.use("/api/v1", routes);
-app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/auth/rider", riderAuthRoutes);
+app.use("/api/v1/auth/customer", customerAuthRoutes);
 app.use("/api/v1/vehicle", vehicleRegistrationRoutes);
 // ──────────────────────────────────────────
 // Error handling

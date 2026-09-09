@@ -1,7 +1,7 @@
 import {signupValidator, loginValidator} from '../validators/authValidator.js';
-import {signup, login} from '../services/authService.js';
+import {riderSignup, riderLogin} from '../services/authService.js';
 
-export const signupController = async (req, res) => {
+export const riderSignupController = async (req, res) => {
     try {
         const { name, email, password, phoneNumber, address } = req.body;
 
@@ -15,7 +15,7 @@ export const signupController = async (req, res) => {
             })
         }
 
-        const result = await signup({ name, email, password, phoneNumber, address });
+        const result = await riderSignup({ name, email, password, phoneNumber, address });
 
         return res.status(201).json({
             success: true,
@@ -31,7 +31,7 @@ export const signupController = async (req, res) => {
     }
 }
     
-export const loginController = async (req, res) => {
+export const riderLoginController = async (req, res) => {
         try {
             const { email, password } = req.body;
 
@@ -45,7 +45,7 @@ export const loginController = async (req, res) => {
             })
         }
 
-        const result = await login({ email, password });
+        const result = await riderLogin({ email, password });
 
         return res.status(200).json({
             success: true,

@@ -1,8 +1,10 @@
 import { pgTable, pgEnum,  uuid, serial, text, timestamp, integer, boolean, varchar } from "drizzle-orm/pg-core";
 import { rider } from "./riderSchema.js"
+import { relations } from "drizzle-orm";
 
-const vehicleType = pgEnum("vehicleType", ["BICYCLE", "BIKE", "CAR", "VAN", "TRUCK", "TRAILER", "BUS"]);
-const goodsType = pgEnum("goodsType", ["GROCERIES", "FOOD", "BEVERAGES", "ELECTRONICS", "CLOTHING", "PHARMACEUTICALS", "DOCUMENT", "OTHER"]);
+
+export const vehicleType = pgEnum("vehicleType", ["BICYCLE", "BIKE", "CAR", "VAN", "TRUCK", "TRAILER", "BUS"]);
+export const goodsType = pgEnum("goodsType", ["GROCERIES", "FOOD", "BEVERAGES", "ELECTRONICS", "CLOTHING", "PHARMACEUTICALS", "DOCUMENT", "OTHER"]);
 
 
 export const vehicle = pgTable("vehicle", {
@@ -21,3 +23,10 @@ export const vehicle = pgTable("vehicle", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const vehicleRelations = relations(vehicle, ({ one }) => ({
+  rider: one(rider, {
+    fields: [vehicle.riderId],
+    references: [rider.id],
+  }),
+}));

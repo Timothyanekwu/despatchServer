@@ -2,6 +2,10 @@ import "dotenv/config";
 
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
+import * as riderSchema from "./models/riderSchema.js";
+import * as vehicleSchema from "./models/vehicleSchema.js";
+import * as customerSchema from "./models/customerSchema.js";
+
 
 const { Pool } = pg;
 
@@ -23,7 +27,9 @@ const pool = new Pool({
   connectionString: databaseUrl.toString(),
   connectionTimeoutMillis: 10000,
 });
-const db = drizzle(pool);
+const db = drizzle(pool, {
+  schema: { ...riderSchema, ...vehicleSchema, ...customerSchema },
+});
 
 export { db, pool };
 export default db;
