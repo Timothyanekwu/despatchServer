@@ -1,4 +1,5 @@
-const express = require("express");
+import express from "express";
+
 const router = express.Router();
 
 /**
@@ -13,6 +14,6 @@ router.get("/", (req, res) => {
 });
 
 // Mount feature routers below:
-// router.use("/auth", require("./authRoutes"));
 
-module.exports = router;
+
+export default router;

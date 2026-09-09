@@ -1,4 +1,4 @@
-const { pool } = require("../db");
+import { pool } from "../db.js";
 
 const connectDB = async () => {
   try {
@@ -11,4 +11,4 @@ const connectDB = async () => {
   }
 };
 
-module.exports = { connectDB, pool };
+export { connectDB, pool };
