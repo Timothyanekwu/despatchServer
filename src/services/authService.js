@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { db } from "../db.js";
-import { rider } from "../models/schema.js";
+import { rider } from "../models/riderSchema.js";
 import { eq } from "drizzle-orm";
 
 export const signup = async ({ name, email, password, phoneNumber, address }) => {

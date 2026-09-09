@@ -1,13 +1,5 @@
 import { pgTable, uuid, serial, text, timestamp, integer, boolean, varchar } from "drizzle-orm/pg-core";
 
-// Define your Drizzle schemas below
-// Example:
-// const users = pgTable("users", {
-//   id: serial("id").primaryKey(),
-//   email: text("email").notNull().unique(),
-//   createdAt: timestamp("created_at").defaultNow().notNull(),
-// });
-
 export const rider = pgTable("rider", {
     id: uuid("id").defaultRandom().primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),

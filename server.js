@@ -8,6 +8,7 @@ import routes from "./src/routes/index.js";
 import notFound from "./src/middlewares/notFound.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
 import authRoutes from "./src/routes/authRoutes.js";
+import vehicleRegistrationRoutes from "./src/routes/vehicleRegistRoutes.js";
 
 // ──────────────────────────────────────────
 // Initialise Express app
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 // ──────────────────────────────────────────
 app.use("/api/v1", routes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/vehicle", vehicleRegistrationRoutes);
 // ──────────────────────────────────────────
 // Error handling
 // ──────────────────────────────────────────
