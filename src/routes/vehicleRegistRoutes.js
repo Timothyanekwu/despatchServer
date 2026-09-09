@@ -1,6 +1,6 @@
 import express from "express";
 import { vehicleRegistrationController } from "../controllers/vehicleRegistController.js";
-import verifyToken from "../middlewares/tokenMiddleware.js";
+import verifyToken from "../middlewares/verifyRiderToken.js";
 
 const vehicleRegistrationRoutes = express.Router();
 
