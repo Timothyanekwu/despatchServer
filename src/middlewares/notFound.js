@@ -9,4 +9,4 @@ const notFound = (req, res, _next) => {
   });
 };
 
-module.exports = notFound;
+export default notFound;

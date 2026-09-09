@@ -1,12 +1,14 @@
-require("dotenv").config();
+import "dotenv/config";
 
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
 
-const connectDB = require("./src/config/db");
-const routes = require("./src/routes");
-const notFound = require("./src/middlewares/notFound");
-const errorHandler = require("./src/middlewares/errorHandler");
+import { connectDB } from "./src/config/db.js";
+import routes from "./src/routes/index.js";
+import notFound from "./src/middlewares/notFound.js";
+import errorHandler from "./src/middlewares/errorHandler.js";
+import authRoutes from "./src/routes/authRoutes.js";
+import vehicleRegistrationRoutes from "./src/routes/vehicleRegistRoutes.js";
 
 // ──────────────────────────────────────────
 // Initialise Express app
@@ -20,11 +22,20 @@ app.use(cors()); // Cross-origin requests
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
+// Request logger middleware (runs for all incoming requests)
+app.use((req, res, next) => {
+  res.on("finish", () => {
+    console.log(`${req.method} ${req.originalUrl} - ${res.statusCode}`);
+  });
+  next();
+});
+
 // ──────────────────────────────────────────
 // Routes
 // ──────────────────────────────────────────
-app.use("/api", routes);
-
+app.use("/api/v1", routes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/vehicle", vehicleRegistrationRoutes);
 // ──────────────────────────────────────────
 // Error handling
 // ──────────────────────────────────────────
@@ -44,3 +55,4 @@ const startServer = async () => {
 };
 
 startServer();
+
