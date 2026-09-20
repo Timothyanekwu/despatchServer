@@ -5,11 +5,12 @@ import pg from "pg";
 import * as riderSchema from "./models/riderSchema.js";
 import * as vehicleSchema from "./models/vehicleSchema.js";
 import * as customerSchema from "./models/customerSchema.js";
-
+import * as deliverySchema from "./models/deliverySchema.js";
 
 const { Pool } = pg;
 
-const connectionString = process.env.DATABASE_URL || process.env.DB_CONNECTION_URI;
+const connectionString =
+  process.env.DATABASE_URL || process.env.DB_CONNECTION_URI;
 
 if (!connectionString) {
   throw new Error("DATABASE_URL is not defined");
@@ -28,7 +29,12 @@ const pool = new Pool({
   connectionTimeoutMillis: 10000,
 });
 const db = drizzle(pool, {
-  schema: { ...riderSchema, ...vehicleSchema, ...customerSchema },
+  schema: {
+    ...riderSchema,
+    ...vehicleSchema,
+    ...customerSchema,
+    ...deliverySchema,
+  },
 });
 
 export { db, pool };

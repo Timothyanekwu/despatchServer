@@ -10,7 +10,8 @@ import errorHandler from "./src/middlewares/errorHandler.js";
 import riderAuthRoutes from "./src/routes/riderAuthRoutes.js";
 import customerAuthRoutes from "./src/routes/customerAuthRoutes.js";
 import vehicleRegistrationRoutes from "./src/routes/vehicleRegistRoutes.js";
-
+import customerDeliveryRoutes from "./src/routes/customerDeliveryRoutes.js";
+import riderDeliveryRoutes from "./src/routes/riderDeliveryRoutes.js";
 
 // ──────────────────────────────────────────
 // Initialise Express app
@@ -39,6 +40,8 @@ app.use("/api/v1", routes);
 app.use("/api/v1/auth/rider", riderAuthRoutes);
 app.use("/api/v1/auth/customer", customerAuthRoutes);
 app.use("/api/v1/vehicle", vehicleRegistrationRoutes);
+app.use("/api/v1/customer/delivery", customerDeliveryRoutes);
+app.use("/api/v1/rider/delivery", riderDeliveryRoutes);
 // ──────────────────────────────────────────
 // Error handling
 // ──────────────────────────────────────────
@@ -53,9 +56,10 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   await connectDB();
   app.listen(PORT, () => {
-    console.log(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    console.log(
+      `🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`,
+    );
   });
 };
 
 startServer();
-
