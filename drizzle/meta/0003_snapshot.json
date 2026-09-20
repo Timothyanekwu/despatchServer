@@ -1,0 +1,471 @@
+{
+  "id": "90ca57a7-702b-432a-ac98-d72fd5409f08",
+  "prevId": "3b21fbcb-ffff-4655-a8e3-b0afc526fdc1",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.customer": {
+      "name": "customer",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "customer_email_unique": {
+          "name": "customer_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.delivery": {
+      "name": "delivery",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "customerId": {
+          "name": "customerId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "riderId": {
+          "name": "riderId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vehicleId": {
+          "name": "vehicleId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "productName": {
+          "name": "productName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "productDescription": {
+          "name": "productDescription",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "productImage": {
+          "name": "productImage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "productCategory": {
+          "name": "productCategory",
+          "type": "productCategory",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pickupAddress": {
+          "name": "pickupAddress",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deliveryAddress": {
+          "name": "deliveryAddress",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deliveryStatus": {
+          "name": "deliveryStatus",
+          "type": "deliveryStatus",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Pending'"
+        },
+        "price": {
+          "name": "price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "paymentType": {
+          "name": "paymentType",
+          "type": "paymentType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 1
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "delivery_customerId_customer_id_fk": {
+          "name": "delivery_customerId_customer_id_fk",
+          "tableFrom": "delivery",
+          "tableTo": "customer",
+          "columnsFrom": [
+            "customerId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "delivery_riderId_rider_id_fk": {
+          "name": "delivery_riderId_rider_id_fk",
+          "tableFrom": "delivery",
+          "tableTo": "rider",
+          "columnsFrom": [
+            "riderId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "delivery_vehicleId_vehicle_id_fk": {
+          "name": "delivery_vehicleId_vehicle_id_fk",
+          "tableFrom": "delivery",
+          "tableTo": "vehicle",
+          "columnsFrom": [
+            "vehicleId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.rider": {
+      "name": "rider",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "rider_email_unique": {
+          "name": "rider_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.vehicle": {
+      "name": "vehicle",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "riderId": {
+          "name": "riderId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vehicleType": {
+          "name": "vehicleType",
+          "type": "vehicleType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "goodsType": {
+          "name": "goodsType",
+          "type": "goodsType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "selfie": {
+          "name": "selfie",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vehicleImage": {
+          "name": "vehicleImage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "licenseImage": {
+          "name": "licenseImage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "plateNumber": {
+          "name": "plateNumber",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vehicleModel": {
+          "name": "vehicleModel",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isApproved": {
+          "name": "isApproved",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "rejectionReason": {
+          "name": "rejectionReason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "vehicle_riderId_rider_id_fk": {
+          "name": "vehicle_riderId_rider_id_fk",
+          "tableFrom": "vehicle",
+          "tableTo": "rider",
+          "columnsFrom": [
+            "riderId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.deliveryStatus": {
+      "name": "deliveryStatus",
+      "schema": "public",
+      "values": [
+        "Pending",
+        "Accepted",
+        "In_transit",
+        "Delivered",
+        "Cancelled"
+      ]
+    },
+    "public.goodsType": {
+      "name": "goodsType",
+      "schema": "public",
+      "values": [
+        "GROCERIES",
+        "FOOD",
+        "BEVERAGES",
+        "ELECTRONICS",
+        "CLOTHING",
+        "PHARMACEUTICALS",
+        "DOCUMENT",
+        "OTHER"
+      ]
+    },
+    "public.vehicleType": {
+      "name": "vehicleType",
+      "schema": "public",
+      "values": [
+        "BICYCLE",
+        "BIKE",
+        "CAR",
+        "VAN",
+        "TRUCK",
+        "TRAILER",
+        "BUS"
+      ]
+    },
+    "public.paymentType": {
+      "name": "paymentType",
+      "schema": "public",
+      "values": [
+        "ONLINE",
+        "COD"
+      ]
+    },
+    "public.productCategory": {
+      "name": "productCategory",
+      "schema": "public",
+      "values": [
+        "GROCERIES",
+        "FOOD",
+        "BEVERAGES",
+        "ELECTRONICS",
+        "CLOTHING",
+        "PHARMACEUTICALS",
+        "DOCUMENT",
+        "OTHER"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
