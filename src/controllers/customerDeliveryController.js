@@ -19,7 +19,6 @@ export const custCreateDelivery = async (req, res) => {
       productCategory,
       pickupAddress,
       deliveryAddress,
-      deliveryStatus,
       paymentType,
       price,
       quantity,
@@ -34,7 +33,6 @@ export const custCreateDelivery = async (req, res) => {
       productCategory,
       pickupAddress,
       deliveryAddress,
-      deliveryStatus,
       paymentType,
       price,
       quantity,
@@ -55,7 +53,6 @@ export const custCreateDelivery = async (req, res) => {
       productCategory,
       pickupAddress,
       deliveryAddress,
-      deliveryStatus,
       paymentType,
       price,
       quantity,
@@ -68,9 +65,9 @@ export const custCreateDelivery = async (req, res) => {
       data: result.data,
     });
   } catch (error) {
-    return res.status(500).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
-      message: "Internal Server Error",
+      message: error.statusCode ? error.message : "Internal Server Error",
       error: error.message,
     });
   }
@@ -102,9 +99,9 @@ export const custCancelDelivery = async (req, res) => {
       data,
     });
   } catch (error) {
-    return res.status(500).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
-      message: "Internal Server Error",
+      message: error.statusCode ? error.message : "Internal Server Error",
       error: error.message,
     });
   }
@@ -152,9 +149,9 @@ export const custHistory = async (req, res) => {
       data,
     });
   } catch (error) {
-    return res.status(500).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
-      message: "Internal Server Error",
+      message: error.statusCode ? error.message : "Internal Server Error",
       error: error.message,
     });
   }

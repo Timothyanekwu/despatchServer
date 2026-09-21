@@ -1,7 +1,8 @@
 
 import { db } from "../db.js";
-import { vehicle } from "../models/vehicleSchema.js"
+import { vehicle } from "../models/vehicleSchema.js";
 import { and, eq } from "drizzle-orm";
+import { AppError } from "../utils/customError.js";
 
 export const vehicleRegistrationService = async ({ vehicleType, goodsType, selfie, vehicleImage, licenseImage, plateNumber, vehicleModel, riderId}) => {
 
@@ -13,7 +14,7 @@ export const vehicleRegistrationService = async ({ vehicleType, goodsType, selfi
 
   // BUSINESS LOGIC
   if (existingVehicle.length > 0) {
-    throw new Error("This vehicle already exists");
+    throw new AppError("This vehicle already exists", 409);
   }
 
   // DATABASE OPERATION
