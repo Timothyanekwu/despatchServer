@@ -24,9 +24,9 @@ export const vehicleRegistrationController = async (req, res) => {
             data: result
         })
     } catch (error) {
-        return res.status(500).json({
+        return res.status(error.statusCode || 500).json({
             success: false, 
-            message: "Internal Server Error",
+            message: error.statusCode ? error.message : "Internal Server Error",
             error: error.message
         })
     }

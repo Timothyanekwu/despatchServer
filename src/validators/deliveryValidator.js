@@ -31,7 +31,6 @@ export const deliveryValidator = z.object({
 
   pickupAddress: nonEmptyString("Pickup address is required"),
   deliveryAddress: nonEmptyString("Delivery address is required"),
-  deliveryStatus: z.enum(deliveryStatuses).default("Pending"),
 
   paymentType: z.enum(paymentTypes),
   price: z.number().int().positive(),
@@ -46,7 +45,9 @@ export const acceptDeliveryValidator = deliveryIdValidator.extend({
   vehicleId: z.uuid(),
 });
 
-export const deliveryStatusValidator = z.enum(deliveryStatuses);
+export const deliveryStatusValidator = z
+  .enum(deliveryStatuses)
+  .default("Pending");
 
 export const orderByValidator = z.enum(
   ["priceAsc", "priceDesc", "latest", "oldest"],

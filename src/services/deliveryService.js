@@ -2,6 +2,7 @@ import { db } from "../db.js";
 import { delivery } from "../models/deliverySchema.js";
 import { and, eq, or, desc, asc } from "drizzle-orm";
 import { vehicle } from "../models/vehicleSchema.js";
+import { AppError } from "../utils/customError.js";
 
 // CUSTOMER'S OPERATION
 export const createDelivery = async ({
@@ -11,7 +12,6 @@ export const createDelivery = async ({
   productCategory,
   pickupAddress,
   deliveryAddress,
-  deliveryStatus,
   paymentType,
   price,
   quantity,
@@ -28,7 +28,7 @@ export const createDelivery = async ({
 
       pickupAddress,
       deliveryAddress,
-      deliveryStatus,
+      deliveryStatus: "Pending",
 
       paymentType,
       price,
@@ -66,7 +66,7 @@ export const pendingDeliveries = async ({ orderBy }) => {
     });
 
   if (pendingDeliveries.length < 1) {
-    throw new Error("No pending deliveries");
+    throw new AppError("No pending deliveries", 404);
   }
 
   return {
@@ -83,7 +83,7 @@ export const acceptDelivery = async ({ deliveryId, riderId, vehicleId }) => {
   });
 
   if (!validVehicle) {
-    throw new Error("Invalid or unapproved vehicle selected");
+    throw new AppError("Invalid or unapproved vehicle selected", 403);
   }
 
   // DATABASE OPERATION
@@ -100,7 +100,7 @@ export const acceptDelivery = async ({ deliveryId, riderId, vehicleId }) => {
     .returning();
 
   if (!acceptedDelivery) {
-    throw new Error("Delivery not found or already accepted");
+    throw new AppError("Delivery not found or already accepted", 404);
   }
 
   return {
@@ -126,7 +126,7 @@ export const confirmPickup = async ({ deliveryId, riderId }) => {
     .returning();
 
   if (!pickupConfirmed) {
-    throw new Error("Delivery not assigned to you or not in accepted state");
+    throw new AppError("Delivery not assigned to you or not in accepted state", 403);
   }
 
   return {
@@ -150,7 +150,7 @@ export const deliveredProduct = async ({ deliveryId, riderId }) => {
     .returning();
 
   if (!deliveredProduct) {
-    throw new Error("Delivery not found or already delivered");
+    throw new AppError("Delivery not found or already delivered", 404);
   }
 
   return {
@@ -178,7 +178,7 @@ export const customerCancelDelivery = async ({ deliveryId, customerId }) => {
     .returning();
 
   if (!cancelledDelivery) {
-    throw new Error("Delivery not found or cannot be cancelled");
+    throw new AppError("Delivery not found or cannot be cancelled", 400);
   }
 
   return {
@@ -205,7 +205,7 @@ export const riderCancelDelivery = async ({ deliveryId, riderId }) => {
     .returning();
 
   if (!cancelledDelivery) {
-    throw new Error("Delivery not found or not assigned to you");
+    throw new AppError("Delivery not found or not assigned to you", 403);
   }
 
   return {
@@ -246,7 +246,7 @@ export const customerHistory = async ({
     });
 
   if (customerHistory.length < 1) {
-    throw new Error("No delivery placed yet");
+    throw new AppError("No delivery placed yet", 404);
   }
 
   return {
@@ -283,7 +283,7 @@ export const riderHistory = async ({ riderId, deliveryStatus, orderBy }) => {
     });
 
   if (riderHistory.length < 1) {
-    throw new Error("No delivery assigned yet");
+    throw new AppError("No delivery assigned yet", 404);
   }
 
   return {

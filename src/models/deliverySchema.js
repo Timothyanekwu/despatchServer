@@ -45,7 +45,7 @@ export const delivery = pgTable("delivery", {
 
   pickupAddress: text("pickupAddress").notNull(),
   deliveryAddress: text("deliveryAddress").notNull(),
-  deliveryStatus: deliveryStatus("deliveryStatus").default("Pending"),
+  deliveryStatus: deliveryStatus("deliveryStatus").notNull(),
 
   price: integer("price").notNull(),
   paymentType: paymentType("paymentType").notNull(),

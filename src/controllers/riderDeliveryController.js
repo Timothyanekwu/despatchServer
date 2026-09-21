@@ -1,5 +1,4 @@
 import {
-  deliveryValidator,
   orderByValidator,
   acceptDeliveryValidator,
   deliveryIdValidator,
@@ -12,8 +11,8 @@ import {
   riderCancelDelivery,
   riderHistory,
   pendingDeliveries,
+  getDespatchVehicles,
 } from "../services/deliveryService.js";
-import { getDespatchVehicles } from "../services/deliveryService.js";
 
 export const getPendingDeliveries = async (req, res) => {
   try {
@@ -22,14 +21,20 @@ export const getPendingDeliveries = async (req, res) => {
     if (orderBy) {
       const validateOrderBy = orderByValidator.safeParse(orderBy);
       if (!validateOrderBy.success) {
-        throw new Error(validateOrderBy.error.issues[0].message);
+        return res.status(400).json({
+          success: false,
+          message: "Validation Failed",
+          error: validateOrderBy.error.issues[0].message,
+        });
       }
     }
 
-    const riderId = req.rider.id;
-
+    const riderId = req.rider?.id;
     if (!riderId) {
-      throw new Error("Unauthorized access!");
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized access",
+      });
     }
 
     const { data } = await pendingDeliveries({ orderBy });
@@ -40,8 +45,10 @@ export const getPendingDeliveries = async (req, res) => {
       data,
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.statusCode ? error.message : "Internal Server Error",
+      error: error.message,
     });
   }
 };
@@ -55,27 +62,34 @@ export const riderAcceptDelivery = async (req, res) => {
       vehicleId,
     });
 
-    console.log("VALIDATE", validateBody.success);
     if (!validateBody.success) {
-      throw new Error(validateBody.error.issues[0].message);
+      return res.status(400).json({
+        success: false,
+        message: "Validation Failed",
+        error: validateBody.error.issues[0].message,
+      });
     }
 
-    const riderId = req.rider.id;
-
+    const riderId = req.rider?.id;
     if (!riderId) {
-      throw new Error("Unauthorized access!");
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized access",
+      });
     }
 
-    const delivery = await acceptDelivery({ deliveryId, vehicleId, riderId });
+    const { data } = await acceptDelivery({ deliveryId, vehicleId, riderId });
 
     return res.status(200).json({
       success: true,
       message: "Delivery accepted successfully",
-      data: delivery,
+      data,
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.statusCode ? error.message : "Internal Server Error",
+      error: error.message,
     });
   }
 };
@@ -87,25 +101,33 @@ export const riderConfirmPickup = async (req, res) => {
     const validateBody = deliveryIdValidator.safeParse({ deliveryId });
 
     if (!validateBody.success) {
-      throw new Error(validateBody.error.issues[0].message);
+      return res.status(400).json({
+        success: false,
+        message: "Validation Failed",
+        error: validateBody.error.issues[0].message,
+      });
     }
 
-    const riderId = req.rider.id;
-
+    const riderId = req.rider?.id;
     if (!riderId) {
-      throw new Error("Unauthorized access!");
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized access",
+      });
     }
 
-    const delivery = await confirmPickup({ deliveryId, riderId });
+    const { data } = await confirmPickup({ deliveryId, riderId });
 
     return res.status(200).json({
       success: true,
       message: "Delivery pickup confirmed successfully",
-      data: delivery,
+      data,
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.statusCode ? error.message : "Internal Server Error",
+      error: error.message,
     });
   }
 };
@@ -117,25 +139,33 @@ export const riderDeliveredProduct = async (req, res) => {
     const validateBody = deliveryIdValidator.safeParse({ deliveryId });
 
     if (!validateBody.success) {
-      throw new Error(validateBody.error.issues[0].message);
+      return res.status(400).json({
+        success: false,
+        message: "Validation Failed",
+        error: validateBody.error.issues[0].message,
+      });
     }
 
-    const riderId = req.rider.id;
-
+    const riderId = req.rider?.id;
     if (!riderId) {
-      throw new Error("Unauthorized access!");
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized access",
+      });
     }
 
-    const delivery = await deliveredProduct({ deliveryId, riderId });
+    const { data } = await deliveredProduct({ deliveryId, riderId });
 
     return res.status(200).json({
       success: true,
       message: "Delivery delivered successfully",
-      data: delivery,
+      data,
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.statusCode ? error.message : "Internal Server Error",
+      error: error.message,
     });
   }
 };
@@ -147,52 +177,72 @@ export const cancelDelivery = async (req, res) => {
     const validateBody = deliveryIdValidator.safeParse({ deliveryId });
 
     if (!validateBody.success) {
-      throw new Error(validateBody.error.issues[0].message);
+      return res.status(400).json({
+        success: false,
+        message: "Validation Failed",
+        error: validateBody.error.issues[0].message,
+      });
     }
 
-    const riderId = req.rider.id;
-
+    const riderId = req.rider?.id;
     if (!riderId) {
-      throw new Error("Unauthorized access!");
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized access",
+      });
     }
 
-    const delivery = await riderCancelDelivery({ deliveryId, riderId });
+    const { data } = await riderCancelDelivery({ deliveryId, riderId });
 
     return res.status(200).json({
       success: true,
       message: "Delivery cancelled successfully",
-      data: delivery,
+      data,
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.statusCode ? error.message : "Internal Server Error",
+      error: error.message,
     });
   }
 };
 
 export const history = async (req, res) => {
   try {
-    const riderId = req.rider.id;
+    const riderId = req.rider?.id;
+    if (!riderId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized access",
+      });
+    }
 
     const { deliveryStatus, orderBy } = req.query;
-
-    // VALIDATE DELIVERY STATUS AND ORDER BY
 
     if (deliveryStatus) {
       const validateStatus = deliveryStatusValidator.safeParse(deliveryStatus);
       if (!validateStatus.success) {
-        throw new Error(validateStatus.error.issues[0].message);
+        return res.status(400).json({
+          success: false,
+          message: "Validation Failed",
+          error: validateStatus.error.issues[0].message,
+        });
       }
     }
 
     if (orderBy) {
       const validateOrderBy = orderByValidator.safeParse(orderBy);
       if (!validateOrderBy.success) {
-        throw new Error(validateOrderBy.error.issues[0].message);
+        return res.status(400).json({
+          success: false,
+          message: "Validation Failed",
+          error: validateOrderBy.error.issues[0].message,
+        });
       }
     }
 
-    const riderDeliveries = await riderHistory({
+    const { data } = await riderHistory({
       riderId,
       deliveryStatus,
       orderBy,
@@ -201,21 +251,25 @@ export const history = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Rider history retrieved successfully",
-      data: riderDeliveries.data,
+      data,
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.statusCode ? error.message : "Internal Server Error",
+      error: error.message,
     });
   }
 };
 
 export const getVehicles = async (req, res) => {
   try {
-    const riderId = req.rider.id;
-
+    const riderId = req.rider?.id;
     if (!riderId) {
-      throw new Error("Unauthorized access!");
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized access",
+      });
     }
 
     const vehicles = await getDespatchVehicles({ riderId });
@@ -233,8 +287,10 @@ export const getVehicles = async (req, res) => {
       data: vehicles.data,
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.statusCode ? error.message : "Internal Server Error",
+      error: error.message,
     });
   }
 };
